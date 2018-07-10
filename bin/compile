@@ -5,22 +5,18 @@ set -e
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-# config
-# http://orm-buildpack.s3.amazonaws.com/Xvfb.tar.gz
-
-# Buildpack URL
-FILE_NAME=xvfb.tar.bz2
-BUILDPACK_XVFB_PACKAGE=https://s3.amazonaws.com/heroku.buildpacks/${FILE_NAME}
+# SDK URL
+FILE_NAME=flex_sdk_4.6.zip
+SDK_PACKAGE=http://download.macromedia.com/pub/flex/sdk/${FILE_NAME}
 
 mkdir -p $CACHE_DIR
 if ! [ -e $CACHE_DIR/$FILE_NAME ]; then
-  echo "-----> Fetching XVFB binaries at ${BUILDPACK_XVFB_PACKAGE}"
-  curl $BUILDPACK_XVFB_PACKAGE -s -o $CACHE_DIR/$FILE_NAME
+  echo "-----> Fetching SDK at ${SDK_PACKAGE}"
+  curl $SDK_PACKAGE -s -o $CACHE_DIR/$FILE_NAME
 fi
 
-echo "-----> Extracting XVFB binaries to ${BUILD_DIR}/vendor/xvfb"
+echo "-----> Extracting XVFB binaries to ${BUILD_DIR}/vendor/flex"
 mkdir -p $CACHE_DIR/$ARCHIVE_NAME
 mkdir -p $BUILD_DIR/vendor
 tar jxf $CACHE_DIR/$FILE_NAME -C $CACHE_DIR
-mv $CACHE_DIR/$ARCHIVE_NAME $BUILD_DIR/vendor/xvfb
-sudo apt-get install xvfb -y
+mv $CACHE_DIR/$ARCHIVE_NAME $BUILD_DIR/vendor/flex
